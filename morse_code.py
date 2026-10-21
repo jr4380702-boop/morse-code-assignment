@@ -83,18 +83,18 @@ morse_code_to_alphabet = {
 
 def encode(prompt:str):
     """converts english to morse code"""
-    prompt = prompt.upper()
+    prompt = prompt.upper().strip()
     str = ""
     for i in range(len(prompt)):
         if alphabet_to_morse_code.get(prompt[i]):
-            if alphabet_to_morse_code.get(prompt[i]):
-                str = f"{str}{alphabet_to_morse_code[prompt[i]]}"
-            else:
-                print(f"[Warning] Character {prompt[i]} not recognized. Skipped. ")
+            str = f"{str}{alphabet_to_morse_code[prompt[i]]}"
+        else:
+            print(f"[Warning] Character {prompt[i]} not recognized. Skipped. ")
     return str
 
 def decode(prompt:str):
     """converts morse code to english"""
+    prompt = f"{prompt} "
     str = ""
     letter = ""
     last_letter = ""
@@ -105,12 +105,11 @@ def decode(prompt:str):
         elif last_letter == "  ":
             str = f"{str}{morse_code_to_alphabet[last_letter]}"
         else:
-            letter = f"{letter} "
-            if morse_code_to_alphabet.get(letter) and letter != "":
-                str = f"{str}{morse_code_to_alphabet[letter]}"
-            elif letter.find(".") > 0 or letter.find("-") > 0:
+            if morse_code_to_alphabet.get(f"{letter} ") and letter != "":
+                str = f"{str}{morse_code_to_alphabet[f"{letter} "]}"
+            elif letter.count(".") > 0 or letter.count("-") > 0:
                 print(f"[Warning] Sequence {letter} not recognized. Skipped. ")
-            elif letter != "" and letter != " ":
+            elif letter != "":
                 print(f"[Warning] Character {prompt[i]} not recognized. Skipped. ")
             last_letter = f"{last_letter} "
             letter = ""
